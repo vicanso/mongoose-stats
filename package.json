@@ -1,0 +1,35 @@
+{
+  "name": "mongoose-stats",
+  "version": "1.0.0",
+  "description": "mongoose stats",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vicanso/mongoose-stats"
+  },
+  "bugs": {
+    "url": "https://github.com/vicanso/mongoose-stats/issues",
+    "email": "vicansocanbico@gmail.com"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "commitmsg": "validate-commit-msg",
+    "precommit": "npm run lint",
+    "format": "node node_modules/.bin/prettier --write *.js",
+    "jest": "node node_modules/.bin/jest --coverage *.test.js",
+    "lint": "node ./node_modules/.bin/eslint *.js",
+    "test": "npm run lint && npm run jest"
+  },
+  "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "husky": "^0.14.3",
+    "jest": "^22.4.2",
+    "mongoose": "^5.0.12",
+    "prettier": "^1.10.2",
+    "validate-commit-msg": "^2.14.0"
+  }
+}
