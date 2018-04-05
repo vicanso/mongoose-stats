@@ -10,6 +10,9 @@
     "url": "https://github.com/vicanso/mongoose-stats/issues",
     "email": "vicansocanbico@gmail.com"
   },
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "main": "index.js",
   "license": "MIT",
   "private": false,
