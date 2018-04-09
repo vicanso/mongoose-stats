@@ -4,6 +4,8 @@ mongoose stats plugin
 
 [![Build Status](https://travis-ci.org/vicanso/mongoose-stats.svg?branch=master)](https://travis-ci.org/vicanso/mongoose-stats)
 [![npm](http://img.shields.io/npm/v/mongoose-stats.svg?style=flat-square)](https://www.npmjs.org/package/mongoose-stats)
+[![npm](http://img.shields.io/npm/v/mongoose-stats.svg?style=flat-square)](https://www.npmjs.org/package/mongoose-stats)
+
 
 ## API
 
@@ -13,6 +15,11 @@ stats event data
 - `op` the op function
 - `use` the time consuming of function
 - `size` the record count of function
+- `options` the query options, optional
+- `conditions` the query conditions, optional
+- `fields` the query fields, optional
+- `update` the update data, optional
+
 
 ```js
 const mongoose = require('mongoose');
