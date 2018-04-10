@@ -52,7 +52,7 @@ module.exports = function stats(schema, options) {
         result[key.substring(1)] = value;
       }
     });
-    schema.emit('stats', result);
+    schema.emit('stats', result, this);
   }
 
   const fns = [
@@ -81,6 +81,6 @@ module.exports = function stats(schema, options) {
       use,
       size: 1,
     };
-    schema.emit('stats', result);
+    schema.emit('stats', result, this);
   });
 };

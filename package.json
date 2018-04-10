@@ -1,6 +1,6 @@
 {
   "name": "mongoose-stats",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "mongoose stats",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
     "email": "vicansocanbico@gmail.com"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=6.0.0"
   },
   "main": "index.js",
   "license": "MIT",

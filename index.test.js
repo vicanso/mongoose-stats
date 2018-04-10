@@ -8,7 +8,7 @@ let StatsModel = null;
 let statsSchema = null;
 const collection = 'Stats';
 
-beforeAll(async () => {
+beforeAll(() => {
   const schema = new Schema(
     {
       name: String,
@@ -31,7 +31,7 @@ afterAll(() => {
   mongoose.disconnect();
 });
 
-test('add data', async () => {
+test('add data', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -43,14 +43,20 @@ test('add data', async () => {
   const doc = new StatsModel({
     name: 'test',
   });
-  await doc.save();
-  await new StatsModel({
-    name: 'test',
-  }).save();
-  expect(done).toBeTruthy();
+  return doc
+    .save()
+    .then(() => {
+      const statsIns = new StatsModel({
+        name: 'test',
+      });
+      return statsIns.save();
+    })
+    .then(() => {
+      expect(done).toBeTruthy();
+    });
 });
 
-test('count', async () => {
+test('count', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -59,11 +65,12 @@ test('count', async () => {
     expect(data.use).toBeGreaterThanOrEqual(0);
     done = true;
   });
-  await StatsModel.count({});
-  expect(done).toBeTruthy();
+  return StatsModel.count({}).then(() => {
+    expect(done).toBeTruthy();
+  });
 });
 
-test('update', async () => {
+test('update', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -73,48 +80,56 @@ test('update', async () => {
     expect(data.update.name).toBe('new name');
     done = true;
   });
-  await StatsModel.update(
+  return StatsModel.update(
     {
       name: 'test',
     },
     {
       name: 'new name',
     },
-  );
-  expect(done).toBeTruthy();
+  ).then(() => {
+    expect(done).toBeTruthy();
+  });
 });
 
 // updateMany: the same as update {multi: true}
-test('updateMany', async () => {
+test('updateMany', () => {
   let done = false;
-  await new StatsModel({
+  return new StatsModel({
     name: 'new name',
-  }).save();
-  await new StatsModel({
-    name: 'new name',
-  }).save();
-
-  statsSchema.once('stats', data => {
-    expect(data.collection).toBe(collection);
-    expect(data.op).toBe('update');
-    expect(data.options.overwrite).toBeUndefined();
-    expect(data.conditions.name).toBe('new name');
-    expect(data.size).toBe(3);
-    expect(data.update.name).toBe('vicanso');
-    done = true;
-  });
-  await StatsModel.updateMany(
-    {
-      name: 'new name',
-    },
-    {
-      name: 'vicanso',
-    },
-  );
-  expect(done).toBeTruthy();
+  })
+    .save()
+    .then(() => {
+      const statsIns = new StatsModel({
+        name: 'new name',
+      });
+      return statsIns.save();
+    })
+    .then(() => {
+      statsSchema.once('stats', data => {
+        expect(data.collection).toBe(collection);
+        expect(data.op).toBe('update');
+        expect(data.options.overwrite).toBeUndefined();
+        expect(data.conditions.name).toBe('new name');
+        expect(data.size).toBe(3);
+        expect(data.update.name).toBe('vicanso');
+        done = true;
+      });
+      return StatsModel.updateMany(
+        {
+          name: 'new name',
+        },
+        {
+          name: 'vicanso',
+        },
+      );
+    })
+    .then(() => {
+      expect(done).toBeTruthy();
+    });
 });
 
-test('find', async () => {
+test('find', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -125,15 +140,17 @@ test('find', async () => {
     expect(data.fields.name).toBe(1);
     done = true;
   });
-  await StatsModel.find({
+  return StatsModel.find({
     name: 'vicanso',
   })
     .select('name')
-    .limit(10);
-  expect(done).toBeTruthy();
+    .limit(10)
+    .then(() => {
+      expect(done).toBeTruthy();
+    });
 });
 
-test('findOne', async () => {
+test('findOne', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -144,15 +161,17 @@ test('findOne', async () => {
     expect(data.options.sort.createdAt).toBe(-1);
     done = true;
   });
-  await StatsModel.findOne({
+  return StatsModel.findOne({
     name: 'vicanso',
   })
     .sort('-createdAt')
-    .select('name');
-  expect(done).toBeTruthy();
+    .select('name')
+    .then(() => {
+      expect(done).toBeTruthy();
+    });
 });
 
-test('findOneAndRemove', async () => {
+test('findOneAndRemove', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -161,13 +180,14 @@ test('findOneAndRemove', async () => {
     expect(data.conditions.name).toBe('vicanso');
     done = true;
   });
-  await StatsModel.findOneAndRemove({
+  return StatsModel.findOneAndRemove({
     name: 'vicanso',
+  }).then(() => {
+    expect(done).toBeTruthy();
   });
-  expect(done).toBeTruthy();
 });
 
-test('findOneAndUpdate', async () => {
+test('findOneAndUpdate', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -177,18 +197,19 @@ test('findOneAndUpdate', async () => {
     expect(data.update.name).toBe('new name');
     done = true;
   });
-  await StatsModel.findOneAndUpdate(
+  return StatsModel.findOneAndUpdate(
     {
       name: 'vicanso',
     },
     {
       name: 'new name',
     },
-  );
-  expect(done).toBeTruthy();
+  ).then(() => {
+    expect(done).toBeTruthy();
+  });
 });
 
-test('replaceOne', async () => {
+test('replaceOne', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -199,22 +220,26 @@ test('replaceOne', async () => {
     expect(data.update.name).toBe('tree.xie');
     done = true;
   });
-  await StatsModel.replaceOne(
+  return StatsModel.replaceOne(
     {
       name: 'vicanso',
     },
     {
       name: 'tree.xie',
     },
-  );
-  const doc = await StatsModel.findOne({
-    name: 'tree.xie',
-  });
-  expect(doc.createdAt).toBeUndefined();
-  expect(done).toBeTruthy();
+  )
+    .then(() =>
+      StatsModel.findOne({
+        name: 'tree.xie',
+      }),
+    )
+    .then(doc => {
+      expect(doc.createdAt).toBeUndefined();
+      expect(done).toBeTruthy();
+    });
 });
 
-test('updateOne', async () => {
+test('updateOne', () => {
   let done = false;
   statsSchema.once('stats', data => {
     expect(data.collection).toBe(collection);
@@ -225,27 +250,33 @@ test('updateOne', async () => {
     expect(data.update.name).toBe('vicanso');
     done = true;
   });
-  await StatsModel.updateOne(
+  return StatsModel.updateOne(
     {
       name: 'tree.xie',
     },
     {
       name: 'vicanso',
     },
-  );
-  expect(done).toBeTruthy();
+  ).then(() => {
+    expect(done).toBeTruthy();
+  });
 });
 
-test('findById', async () => {
+test('findById', () => {
   let done = false;
-  const doc = await StatsModel.findOne({});
-  statsSchema.once('stats', data => {
-    expect(data.collection).toBe(collection);
-    expect(data.op).toBe('findOne');
-    expect(data.size).toBe(1);
-    done = true;
-  });
-  // eslint-disable-next-line
-  await StatsModel.findById(doc._id);
-  expect(done).toBeTruthy();
+  return StatsModel.findOne({})
+    .then(doc => {
+      statsSchema.once('stats', data => {
+        expect(data.collection).toBe(collection);
+        expect(data.op).toBe('findOne');
+        expect(data.size).toBe(1);
+        done = true;
+      });
+
+      // eslint-disable-next-line
+      return StatsModel.findById(doc._id);
+    })
+    .then(() => {
+      expect(done).toBeTruthy();
+    });
 });
