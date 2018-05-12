@@ -4,7 +4,7 @@ mongoose stats plugin
 
 [![Build Status](https://travis-ci.org/vicanso/mongoose-stats.svg?branch=master)](https://travis-ci.org/vicanso/mongoose-stats)
 [![npm](http://img.shields.io/npm/v/mongoose-stats.svg?style=flat-square)](https://www.npmjs.org/package/mongoose-stats)
-[![npm](http://img.shields.io/npm/v/mongoose-stats.svg?style=flat-square)](https://www.npmjs.org/package/mongoose-stats)
+[![Github Releases](https://img.shields.io/npm/dm/mongoose-stats.svg.svg?style=flat-square)](https://github.com/vicanso/mongoose-stats.svg)
 
 
 ## API
