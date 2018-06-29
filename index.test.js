@@ -92,6 +92,31 @@ test('update', () => {
   });
 });
 
+test('update(upsert)', () => {
+  let done = false;
+  statsSchema.once('stats', data => {
+    expect(data.collection).toBe(collection);
+    expect(data.op).toBe('update');
+    expect(data.options.overwrite).toBeUndefined();
+    expect(data.size).toBe(0);
+    expect(data.update.name).toBe('my-update-upsert');
+    done = true;
+  });
+  return StatsModel.update(
+    {
+      name: 'my-update-upsert',
+    },
+    {
+      name: 'my-update-upsert',
+    },
+    {
+      upsert: true,
+    },
+  ).then(() => {
+    expect(done).toBeTruthy();
+  });
+})
+
 // updateMany: the same as update {multi: true}
 test('updateMany', () => {
   let done = false;

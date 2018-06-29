@@ -27,7 +27,8 @@ module.exports = function stats(schema, options) {
         size = data;
         break;
       case 'update':
-        if (data.result) {
+        // 有可能做的是findAndUpdte，如果无数据时insert，则返回的data为空
+        if (data && data.result) {
           size = data.result.nModified;
         }
         break;
